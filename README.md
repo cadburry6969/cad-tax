@@ -7,7 +7,7 @@ A Simple QBCore Tax System
 * Change Config values in `cad-tax/shared.lua` to your liking.
 * Done
 
-# Exports
+# Server Exports
 
 ```lua
 exports["cad-tax"]:GetCurrentTax(src, type)    -- Get Current Tax percent for the type ["vehicle", "house", "income"]
