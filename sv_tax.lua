@@ -8,20 +8,20 @@ function PlayersTax()
             local Amount = 0
             if Player.PlayerData.job.name ~= 'police' and Player.PlayerData.job.name ~= 'ambulance' then
                 if Player.PlayerData.money.bank > Shared.EconomyTax['low'] or Player.PlayerData.money.cash > Shared.EconomyTax['low'] then  
-                    Amount = (Player.PlayerData.money.bank*Shared.Shared.EconomyTaxPercentage['low']/1000)                          
-                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.Shared.EconomyTaxPercentage['low'].."% by the government for $"..Amount..".")  
+                    Amount = (Player.PlayerData.money.bank*Shared.EconomyTaxPercentage['low']/1000)                          
+                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.EconomyTaxPercentage['low'].."% by the government for $"..Amount..".")  
                 elseif Player.PlayerData.money.bank > Shared.EconomyTax['medium'] or Player.PlayerData.money.cash > Shared.EconomyTax['medium'] then                
-                    Amount = (Player.PlayerData.money.bank*Shared.Shared.EconomyTaxPercentage['medium']/1000)
-                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.Shared.EconomyTaxPercentage['medium'].."% by the government for $"..Amount..".")  
+                    Amount = (Player.PlayerData.money.bank*Shared.EconomyTaxPercentage['medium']/1000)
+                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.EconomyTaxPercentage['medium'].."% by the government for $"..Amount..".")  
                 elseif Player.PlayerData.money.bank > Shared.EconomyTax['high'] or Player.PlayerData.money.cash > Shared.EconomyTax['high'] then                
-                    Amount = (Player.PlayerData.money.bank*Shared.Shared.EconomyTaxPercentage['high']/1000)
-                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.Shared.EconomyTaxPercentage['high'].."% by the government for $"..Amount..".")  
+                    Amount = (Player.PlayerData.money.bank*Shared.EconomyTaxPercentage['high']/1000)
+                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.EconomyTaxPercentage['high'].."% by the government for $"..Amount..".")  
                 elseif Player.PlayerData.money.bank > Shared.EconomyTax['ultra'] or Player.PlayerData.money.cash > Shared.EconomyTax['ultra'] then                
-                    Amount = (Player.PlayerData.money.bank*Shared.Shared.EconomyTaxPercentage['ultra']/1000)
-                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.Shared.EconomyTaxPercentage['ultra'].."% by the government for $"..Amount..".")  
+                    Amount = (Player.PlayerData.money.bank*Shared.EconomyTaxPercentage['ultra']/1000)
+                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.EconomyTaxPercentage['ultra'].."% by the government for $"..Amount..".")  
                 elseif Player.PlayerData.money.bank > Shared.EconomyTax['extreme'] or Player.PlayerData.money.cash > Shared.EconomyTax['extreme'] then                
-                    Amount = (Player.PlayerData.money.bank*Shared.Shared.EconomyTaxPercentage['extreme']/1000)
-                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.Shared.EconomyTaxPercentage['extreme'].."% by the government for $"..Amount..".")                
+                    Amount = (Player.PlayerData.money.bank*Shared.EconomyTaxPercentage['extreme']/1000)
+                    TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at "..Shared.EconomyTaxPercentage['extreme'].."% by the government for $"..Amount..".")                
                 else
                     Amount = 100
                     TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at standard rate by the government for $100.")                                            
@@ -32,7 +32,7 @@ function PlayersTax()
             end
         end
     end
-    SetTimeout(Shared.Shared.EconomyTaxInterval * (60 * 1000), PlayersTax) -- 60 minutes
+    SetTimeout(Shared.EconomyTaxInterval * (60 * 1000), PlayersTax) -- 60 minutes
 end
 
 function CarsTax()     
