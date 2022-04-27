@@ -39,46 +39,45 @@ function CarsTax()
     local Players = QBCore.Functions.GetPlayers()
     MySQL.Async.fetchAll('SELECT * FROM player_vehicles',{},function(Vehicles)        
         for i=1, #Players, 1 do 
-            local VehCount = 0            
-            for a=1, #Vehicles,1 do 
-                if Players[i].PlayerData.citizenid == Vehicles[a].citizenid and (Players[i].PlayerData.job.name ~= 'police' and Players[i].PlayerData.job.name ~= 'ambulance' and Players[i].PlayerData.job.name ~= 'realestate') then
-                    VehCount = VehCount + 1
+            local VehCount = 0      
+            local Player = QBCore.Functions.GetPlayer(Players[i])      
+            if Player then          
+                for a=1, #Vehicles,1 do 
+                    if Player.PlayerData.citizenid == Vehicles[a].citizenid and (Player.PlayerData.job.name ~= 'police' and Player.PlayerData.job.name ~= 'ambulance') then
+                        VehCount = VehCount + 1
+                    end
                 end
-            end
-            if VehCount > 0 then
-                local VehTax = VehCount * Shared.CarTaxRate
-                local Player = QBCore.Functions.GetPlayerByCitizenId(Players[i].citizenid)
-                if Player then          
+                if VehCount > 0 then
+                    local VehTax = VehCount * CarTaxRate                                    
                     Player.Functions.RemoveMoney("bank", math.floor(VehTax), "vehicletax")
-                    TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(VehTax).." as Vehicle Tax.")                               
-                end
-            end            
+                    TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(VehTax).." as Vehicle Tax.")                                               
+                end              
+            end
         end
     end)
-    SetTimeout(Shared.CarTaxInterval * (60 * 1000), CarsTax) -- 60 minutes
+    SetTimeout(CarTaxInterval * (60 * 1000), CarsTax) -- 60 minutes
 end
 
 function HousesTax()     
     local Players = QBCore.Functions.GetPlayers()
     MySQL.Async.fetchAll('SELECT * FROM player_houses',{},function(Houses)        
         for i=1, #Players, 1 do 
-            local HouseCount = 0            
-            for a=1, #Houses,1 do 
-                if Players[i].PlayerData.citizenid == Houses[a].citizenid and (Players[i].PlayerData.job.name ~= 'police' and Players[i].PlayerData.job.name ~= 'ambulance' and Players[i].PlayerData.job.name ~= 'realestate') then
-                    HouseCount = HouseCount + 1
+            local HouseCount = 0  
+            if Player then            
+                for a=1, #Houses,1 do 
+                    if Player.PlayerData.citizenid == Houses[a].citizenid and (Player.PlayerData.job.name ~= 'police' and Player.PlayerData.job.name ~= 'ambulance') then
+                        HouseCount = HouseCount + 1
+                    end
                 end
-            end
-            if HouseCount > 0 then
-                local HouseTax = HouseCount * Shared.HouseTaxRate
-                local Player = QBCore.Functions.GetPlayerByCitizenId(Players[i].citizenid)
-                if Player then          
+                if HouseCount > 0 then
+                    local HouseTax = HouseCount * HouseTaxRate                            
                     Player.Functions.RemoveMoney("bank", math.floor(HouseTax), "housetax")
-                    TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(HouseTax).." as House Tax.")                               
-                end
-            end            
+                    TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(HouseTax).." as House Tax.")                                           
+                end            
+            end
         end
     end)
-    SetTimeout(Shared.HouseTaxInterval * (60 * 1000), CarsTax) -- 60 minutes
+    SetTimeout(HouseTaxInterval * (60 * 1000), CarsTax) -- 60 minutes
 end
 
 function GetCurrentTax(src, taxtype)
