@@ -109,7 +109,7 @@ function GetCurrentTax(src, taxtype)
 end
 
 RegisterNetEvent("cad-tax:notifytax", function()
-    QBCore.Functions.Notify("Tax has been set to $"..Shared.CarTaxRate.." per car, $"..Shared.HouseTaxRate.." per house, and player tax depends on bank balance.")
+    TriggerClientEvent("QBCore:Notify", source, "Tax has been set to $"..Shared.CarTaxRate.." per car, $"..Shared.HouseTaxRate.." per house, and player tax depends on bank balance.")
 end)
 
 CreateThread(function()    
