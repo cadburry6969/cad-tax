@@ -33,7 +33,7 @@ end
 
 function CarsTax()     
     local Players = QBCore.Functions.GetPlayers()
-    MySQL.Async.fetchAll('SELECT * FROM player_vehicles',{},function(Vehicles)        
+    MySQL.query('SELECT * FROM player_vehicles',{},function(Vehicles)        
         for i=1, #Players, 1 do 
             local VehCount = 0  
             local LP = QBCore.Functions.GetPlayer(Players[i])
@@ -59,7 +59,7 @@ end
 
 function HousesTax()     
     local Players = QBCore.Functions.GetPlayers()
-    MySQL.Async.fetchAll('SELECT * FROM player_houses',{},function(Houses)        
+    MySQL.query('SELECT * FROM player_houses',{},function(Houses)        
         for i=1, #Players, 1 do 
             local HouseCount = 0  
             local LP = QBCore.Functions.GetPlayer(Players[i])
