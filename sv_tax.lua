@@ -26,6 +26,7 @@ function PlayersTax()
                 TriggerClientEvent("QBCore:Notify", Players[i], "You have been taxed at standard rate by the government for $100.")                                            
             end
             Player.Functions.RemoveMoney("bank", math.floor(Amount), "incometax")
+            TriggerEvent("qb-log:server:CreateLog", "cadtax", "["..Player.PlayerData.citizenid.."] was charged income tax of $"..math.floor(Amount))
         end
     end
     SetTimeout(Shared.EconomyTaxInterval * (60 * 1000), PlayersTax)
@@ -49,6 +50,7 @@ function CarsTax()
                     if Player then          
                         Player.Functions.RemoveMoney("bank", math.floor(VehTax), "vehicletax")
                         TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(VehTax).." as Vehicle Tax.")                               
+                        TriggerEvent("qb-log:server:CreateLog", "cadtax", "["..Player.PlayerData.citizenid.."] was charged vehicle tax of $"..math.floor(VehTax))
                     end
                 end   
             end         
@@ -75,6 +77,7 @@ function HousesTax()
                     if Player then          
                         Player.Functions.RemoveMoney("bank", math.floor(HouseTax), "housetax")
                         TriggerClientEvent("QBCore:Notify", Player.PlayerData.source, "You have been taxed $"..math.floor(HouseTax).." as House Tax.")                               
+                        TriggerEvent("qb-log:server:CreateLog", "cadtax", "["..Player.PlayerData.citizenid.."] was charged houses tax of $"..math.floor(HouseTax))
                     end
                 end 
             end           
@@ -107,10 +110,6 @@ function GetCurrentTax(src, taxtype)
         end        
     end
 end
-
-RegisterNetEvent("cad-tax:notifytax", function()
-    TriggerClientEvent("QBCore:Notify", source, "Tax has been set to $"..Shared.CarTaxRate.." per car, $"..Shared.HouseTaxRate.." per house, and player tax depends on bank balance.")
-end)
 
 CreateThread(function()    
     Wait(1 * 60 * 1000) -- wait just for server to load properly then execute below

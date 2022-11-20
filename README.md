@@ -1,4 +1,5 @@
 # cad-tax
+
 A Simple QBCore Tax System
 
 # Installation
@@ -15,3 +16,10 @@ exports["cad-tax"]:PlayersTax() -- Run this tax manually
 exports["cad-tax"]:CarsTax()  -- Run this tax manually
 exports["cad-tax"]:HousesTax()  -- Run this tax manually
 ```
+
+
+# Setup Logs
+
+Add this in your `qb-smallresources/server/logs.lua`
+
+`['cadtax'] = 'PUT_WEBHOOK_HERE',`
