@@ -1,9 +1,10 @@
-fx_version "adamant"
+fx_version "cerulean"
 game "gta5"
+lua54 "yes"
 
 author "Cadburry"
-description "QBCore Tax System by Cadburry#7547"
-version "0.1.0"
+description "QBCore Tax System"
+version "0.1.1"
 
 shared_script "shared.lua"
 server_scripts {
@@ -12,7 +13,7 @@ server_scripts {
 }
 
 server_exports {
-    "GetCurrentTax",    
+    "GetCurrentTax",
     "PlayersTax",
     "CarsTax",
     "HousesTax",
