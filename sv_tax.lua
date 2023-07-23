@@ -1,6 +1,23 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+local function addMoneyToAccount(amount, text)
+    if not Shared.TaxesAccountEnabled then return end
+    if Shared.TaxesAccount.accountType == 'business' then
+        local business = exports['qb-banking']:business(Shared.TaxesAccount.name, Shared.TaxesAccount.business_id)
+        if business then business.addBalance(amount, text) end
+    elseif Shared.TaxesAccount.accountType == 'player' then
+        local onlinePlayer = QBCore.Functions.GetPlayerByCitizenId(Shared.TaxesAccount.playerCitizenId)
+        if onlinePlayer then
+            onlinePlayer.Functions.SetMoney('bank', amount, text)
+        else
+            local offlinePlayer = QBCore.Functions.GetOfflinePlayerByCitizenId(Shared.TaxesAccount.playerCitizenId)
+            offlinePlayer.Functions.SetMoney('bank', amount, text)
+        end
+    end
+end
+
 function PlayersTax()
+    local taxAmount = 0
     local Players = QBCore.Functions.GetPlayers()
     for i = 1, #Players, 1 do
         local Player = QBCore.Functions.GetPlayer(Players[i])
@@ -39,12 +56,16 @@ function PlayersTax()
             Player.Functions.RemoveMoney("bank", math.floor(Amount), "incometax")
             TriggerEvent("qb-log:server:CreateLog", "cadtax",
                 "[" .. Player.PlayerData.citizenid .. "] was charged income tax of $" .. math.floor(Amount))
+            taxAmount = taxAmount + Amount
         end
     end
+    local amount = math.floor(taxAmount)
+    addMoneyToAccount(amount, string.format(Shared.Lang.player_tax, amount))
     SetTimeout(Shared.EconomyTaxInterval * (60 * 1000), PlayersTax)
 end
 
 function CarsTax()
+    local taxAmount = 0
     local Players = QBCore.Functions.GetPlayers()
     MySQL.query('SELECT * FROM player_vehicles', {}, function(Vehicles)
         for i = 1, #Players, 1 do
@@ -65,15 +86,19 @@ function CarsTax()
                             "You have been taxed $" .. math.floor(VehTax) .. " as Vehicle Tax.")
                         TriggerEvent("qb-log:server:CreateLog", "cadtax",
                             "[" .. Player.PlayerData.citizenid .. "] was charged vehicle tax of $" .. math.floor(VehTax))
+                        taxAmount = taxAmount + VehTax
                     end
                 end
             end
         end
+        local amount = math.floor(taxAmount)
+        addMoneyToAccount(amount, string.format(Shared.Lang.car_tax, amount))
     end)
     SetTimeout(Shared.CarTaxInterval * (60 * 1000), CarsTax)
 end
 
 function HousesTax()
+    local taxAmount = 0
     local Players = QBCore.Functions.GetPlayers()
     MySQL.query('SELECT * FROM player_houses', {}, function(Houses)
         for i = 1, #Players, 1 do
@@ -94,10 +119,13 @@ function HousesTax()
                             "You have been taxed $" .. math.floor(HouseTax) .. " as House Tax.")
                         TriggerEvent("qb-log:server:CreateLog", "cadtax",
                             "[" .. Player.PlayerData.citizenid .. "] was charged houses tax of $" .. math.floor(HouseTax))
+                        taxAmount = taxAmount + HouseTax
                     end
                 end
             end
         end
+        local amount = math.floor(taxAmount)
+        addMoneyToAccount(amount, string.format(Shared.Lang.house_tax, amount))
     end)
     SetTimeout(Shared.HouseTaxInterval * (60 * 1000), HousesTax)
 end

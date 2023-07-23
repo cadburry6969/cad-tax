@@ -23,3 +23,18 @@ Shared.CarTaxInterval = 180 -- in minutes (3hrs)
 
 Shared.HouseTaxRate = 500 -- $500 per house 
 Shared.HouseTaxInterval = 180 -- in minutes (3hrs)
+
+-- account where all the taxes will go to
+Shared.TaxesAccountEnabled = false
+Shared.TaxesAccount = {
+    accountType = 'business', -- 'business' or 'player'
+    playerCitizenId = 'XX1111', -- player citizenid (only for player account)
+    business_name = 'state', -- 'businessName' (only for business account)
+    business_id = 1 -- -- 'businessId' (only for business account)
+}
+
+Shared.Lang = {
+    player_tax = 'Player tax recieved $%d',
+    car_tax = 'Vehicle tax recieved $%d',
+    house_tax = 'House tax recieved $%d'
+}
