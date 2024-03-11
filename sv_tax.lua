@@ -77,7 +77,7 @@ function CarsTax()
                         VehCount = VehCount + 1
                     end
                 end
-                if VehCount > 0 then
+                if VehCount > 0 and LP.PlayerData.job.type ~= "leo" then --Leo type (pd sheriff etc.) professions do not charge vehicle tax
                     local VehTax = VehCount * Shared.CarTaxRate
                     local Player = QBCore.Functions.GetPlayerByCitizenId(LP.PlayerData.citizenid)
                     if Player then
