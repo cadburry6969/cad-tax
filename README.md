@@ -1,25 +1,29 @@
-# cad-tax
-
-A Simple QBCore Tax System
+Simple Tax System for QBCore
 
 # Installation
 
-* First add this to resources folder and ensure in `server.cfg`
-* Change Config values in `cad-tax/shared.lua` to your liking.
-* Done
+- First add this to resources folder and ensure in `server.cfg`
+- Configure values in files present in `cad-tax/config/` as required.
 
 # Server Exports
 
 ```lua
-exports["cad-tax"]:GetCurrentTax(src, type)    -- Get Current Tax percent for the type ["vehicle", "house", "income"]
-exports["cad-tax"]:PlayersTax() -- Run this tax manually
-exports["cad-tax"]:CarsTax()  -- Run this tax manually
-exports["cad-tax"]:HousesTax()  -- Run this tax manually
+exports["cad-tax"]:GetCurrentTax(src, type)    -- Get Current Tax percent for the type ["vehicle", "property", "house", "income"]
+exports["cad-tax"]:IsTaxWaivedOff(citizenid) -- Check the player has tax waived off
+exports["cad-tax"]:PlayersTax() -- To start manually
+exports["cad-tax"]:VehiclesTax()  -- To start manually
+exports["cad-tax"]:PropertiesTax()  -- To start manually
+exports["cad-tax"]:CarsTax()  -- To start manually (deprecated)
+exports["cad-tax"]:HousesTax()  -- To start manually (deprecated)
 ```
-
 
 # Setup Logs
 
-Add this in your `qb-smallresources/server/logs.lua`
+> For qb logs
+- Add below code in `qb-smallresources/server/logs.lua`
+```lua
+['cadtax'] = 'PUT_WEBHOOK_HERE',
+```
 
-`['cadtax'] = 'PUT_WEBHOOK_HERE',`
+> For ox logs
+- Refer [Overextended Docs](https://overextended.dev/ox_lib/Modules/Logger/Server)
