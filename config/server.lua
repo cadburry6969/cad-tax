@@ -1,7 +1,7 @@
 Config = {}
 
 Config.Locale = 'en' -- 'en'
-Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone'
+Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries'
 Config.Logger = 'qb' -- 'qb', 'ox'
 
 -- Enable/Disable the taxes
@@ -33,8 +33,8 @@ Config.TaxesAccountEnabled = false
 Config.TaxesAccount = {
     accountType = 'business', -- 'business' or 'player'
     playerCitizenId = 'XX1111', -- player citizenid (only for player account)
-    business_name = 'state', -- 'businessName' (only for business account)
-    business_id = 1 -- -- 'businessId' (only for business account)
+    accountName = 'state', -- 'businessName' (only for business account)
+    accountId = 1 -- -- 'businessId' (only for business account) (only for qb-banking)
 }
 
 -- citizen ids mentioned here will not have to pay any taxes

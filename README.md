@@ -5,6 +5,12 @@ Simple Tax System for QBCore
 - First add this to resources folder and ensure in `server.cfg`
 - Configure values in files present in `cad-tax/config/` as required.
 
+# Supported
+- ESX / QBCore
+- qb-banking / Renewed-Banking / snipe-banking
+- ox lib logger / qb logs
+- ox lib notify / qb notify / qb-phone / snappy-phone / yseries
+
 # Server Exports
 
 ```lua

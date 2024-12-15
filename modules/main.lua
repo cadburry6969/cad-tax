@@ -1,18 +1,9 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
-local function addMoneyToAccount(amount, text)
+local function addMoneyToAccount(amount, reason)
     if not Config.TaxesAccountEnabled then return end
     if Config.TaxesAccount.accountType == 'business' then
-        local business = exports['qb-banking']:business(Config.TaxesAccount.name, Config.TaxesAccount.business_id)
-        if business then business.addBalance(amount, text) end
+        AddMoneyToAccount(amount, reason)
     elseif Config.TaxesAccount.accountType == 'player' then
-        local onlinePlayer = QBCore.Functions.GetPlayerByCitizenId(Config.TaxesAccount.playerCitizenId)
-        if onlinePlayer then
-            onlinePlayer.Functions.SetMoney('bank', amount, text)
-        else
-            local offlinePlayer = QBCore.Functions.GetOfflinePlayerByCitizenId(Config.TaxesAccount.playerCitizenId)
-            offlinePlayer.Functions.SetMoney('bank', amount, text)
-        end
+        AddMoneyToOfflinePlayer(amount, reason)
     end
 end
 
@@ -26,9 +17,9 @@ local function notification(src, msg)
     elseif Config.Notify == 'ox' then
         TriggerClientEvent("ox_lib:notify", src, { description = msg, duration = 10000 })
     elseif Config.Notify == 'qb-phone' then
-        local player = QBCore.Functions.GetPlayer(src)
+        local player = GetPlayer(src)
         if not player then return end
-        exports['qb-phone']:sendNewMailToOffline(player.PlayerData.citizenid, {
+        exports['qb-phone']:sendNewMailToOffline(player.citizenid, {
             sender = Language('notify_header'),
             subject = Language('notify_subject'),
             message = msg,
@@ -40,6 +31,13 @@ local function notification(src, msg)
             description = msg,
             duration = 10000,
         })
+    elseif Config.Notify == 'yseries' then
+        exports.yseries:SendNotification({
+            app = 'ypay',
+            title = Language('notify_header'),
+            text = msg,
+            timeout = 10000,
+        }, 'source',  src)
     end
 end
 
@@ -53,13 +51,12 @@ end
 
 function PlayersTax()
     local accountAmount = 0
-    local players = QBCore.Functions.GetQBPlayers()
-    for src in pairs(players) do
-        local player = QBCore.Functions.GetPlayer(src)
+    local players = GetAllPlayers()
+    for src, player in pairs(players) do
         if player then
-            local citizenid = player.PlayerData.citizenid
-            local playerCash = player.PlayerData.money.cash
-            local playerBank = player.PlayerData.money.bank
+            local citizenid = player.citizenid
+            local playerCash = player.cash
+            local playerBank = player.bank
             local taxInfo = nil
             if isTaxWaivedOff(citizenid) then goto skip end
             for _, tax in pairs(Config.IncomeTax) do
@@ -75,7 +72,7 @@ function PlayersTax()
             if not taxInfo then
                 taxInfo = { type = 'bank', amount = Config.IncomeTaxStandard }
             end
-            player.Functions.RemoveMoney(taxInfo.type, taxInfo.amount, "incometax")
+            player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
             accountAmount = accountAmount + taxInfo.amount
             notification(src, string.format(Language('player_taxed'), taxInfo.percentage, taxInfo.amount))
             sendLog(src, string.format(Language('player_taxed_log'), citizenid, taxInfo.amount))
@@ -89,24 +86,23 @@ end
 
 function VehiclesTax()
     local accountAmount = 0
-    local players = QBCore.Functions.GetQBPlayers()
-    MySQL.query('SELECT * FROM player_vehicles', {}, function(vehicles)
-        for src in pairs(players) do
-            local player = QBCore.Functions.GetPlayer(src)
+    local players = GetAllPlayers()
+    MySQL.query(Config.VehicleSQL.query, {}, function(vehicles)
+        for src, player in pairs(players) do
             if player then
                 local vehicleCount = 0
-                local citizenid = player.PlayerData.citizenid
+                local citizenid = player.citizenid
                 if isTaxWaivedOff(citizenid) then goto skip end
                 for i = 1, #vehicles, 1 do
-                    if citizenid == vehicles[i].citizenid then
+                    if citizenid == vehicles[i][Config.VehicleSQL.identifier] then
                         vehicleCount = vehicleCount + 1
                     end
                 end
                 if vehicleCount > 0 then
                     local tax = math.floor(vehicleCount * Config.VehicleTax)
-                    player.Functions.RemoveMoney("bank", tax, "vehicletax")
+                    player.removeMoney("bank", tax, "vehicletax")
                     accountAmount = accountAmount + tax
-                    notification(player.PlayerData.source, string.format(Language('vehicle_taxed'), tax))
+                    notification(player.source, string.format(Language('vehicle_taxed'), tax))
                     sendLog(src, string.format(Language('vehicle_taxed_log'), citizenid, tax))
                 end
             end
@@ -120,24 +116,23 @@ end
 
 function PropertiesTax()
     local accountAmount = 0
-    local players = QBCore.Functions.GetQBPlayers()
-    MySQL.query('SELECT * FROM player_houses', {}, function(properties)
-        for src in pairs(players) do
+    local players = GetAllPlayers()
+    MySQL.query(Config.PropertySQL.query, {}, function(properties)
+        for src, player in pairs(players) do
             local propertyCount = 0
-            local player = QBCore.Functions.GetPlayer(src)
             if player then
-                local citizenid = player.PlayerData.citizenid
+                local citizenid = player.citizenid
                 if isTaxWaivedOff(citizenid) then goto skip end
                 for i = 1, #properties, 1 do
-                    if citizenid == properties[i].citizenid then
+                    if citizenid == properties[i][Config.PropertySQL.identifier] then
                         propertyCount = propertyCount + 1
                     end
                 end
                 if propertyCount > 0 then
                     local tax = math.floor(propertyCount * Config.PropertyTax)
-                    player.Functions.RemoveMoney("bank", tax, "housetax")
+                    player.removeMoney("bank", tax, "housetax")
                     accountAmount = accountAmount + tax
-                    notification(player.PlayerData.source, string.format(Language('property_taxed'), tax))
+                    notification(player.source, string.format(Language('property_taxed'), tax))
                     sendLog(src, string.format(Language('property_taxed_log'), citizenid, tax))
                 end
             end
@@ -150,11 +145,11 @@ function PropertiesTax()
 end
 
 function GetCurrentTax(src, taxtype)
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = GetPlayer(src)
     if not player then return false end
     if taxtype == 'income' then
-        local playerCash = player.PlayerData.money.cash
-        local playerBank = player.PlayerData.money.bank
+        local playerCash = player.cash
+        local playerBank = player.bank
         local taxAmount = nil
         for _, tax in pairs(Config.IncomeTax) do
             if (playerCash >= tax.amount) and (not taxAmount) then
