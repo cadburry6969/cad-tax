@@ -1,7 +1,7 @@
 Config = {}
 
 Config.Locale = 'en' -- 'en'
-Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries'
+Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries', 'lb-phone'
 Config.Logger = 'qb' -- 'qb', 'ox'
 
 -- Enable/Disable the taxes
@@ -10,6 +10,7 @@ Config.TaxStatus = {
     vehicle = true,
     property = true
 }
+Config.TaxStatusStartDelay = 30 -- seconds
 
 Config.IncomeTax = {
     -- { bracket = 'NAME', amount = THRESHOLD_AMOUNT, percentage = 0-100% (decimal allowed) },

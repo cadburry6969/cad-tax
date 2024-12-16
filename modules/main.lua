@@ -38,6 +38,12 @@ local function notification(src, msg)
             text = msg,
             timeout = 10000,
         }, 'source',  src)
+    elseif Config.Notify == 'lb-phone' then
+        exports["lb-phone"]:SendNotification(src, {
+            app = "Settings",
+            title = Language('notify_header'),
+            content = msg,
+        })
     end
 end
 
@@ -179,7 +185,7 @@ exports('HousesTax', PropertiesTax)
 exports('CarsTax', VehiclesTax)
 
 -- Wait for server to load properly then execute the taxes
-SetTimeout(30000, function()
+SetTimeout(Config.TaxStatusStartDelay * 1000, function()
     if Config.TaxStatus.income then PlayersTax() end
     if Config.TaxStatus.vehicle then VehiclesTax() end
     if Config.TaxStatus.property then PropertiesTax() end
