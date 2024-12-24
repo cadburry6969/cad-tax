@@ -7,6 +7,10 @@ function AddMoneyToAccount(amount, reason)
     elseif GetResourceState('qb-banking') == 'started' then
         local business = exports['qb-banking']:business(Config.TaxesAccount.accountName, Config.TaxesAccount.accountId)
         return (business and business.addBalance(amount, reason)) or false
+    elseif GetResourceState('okokBanking') == 'started' then
+        return exports['okokBanking']:AddMoney(Config.TaxesAccount.accountName, Config.TaxesAccount.accountId)
+    elseif GetResourceState('tgg-banking') == 'started' then
+        return exports['tgg-banking']:AddSocietyMoney(Config.TaxesAccount.accountName, Config.TaxesAccount.accountId)
     else
         print("NO BANKING CONFIGURED")
         return false
