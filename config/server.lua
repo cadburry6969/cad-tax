@@ -29,6 +29,10 @@ Config.VehicleTaxInterval = 120 -- in minutes
 Config.PropertyTax = 500 -- $500 per property
 Config.PropertyTaxInterval = 120 -- in minutes
 
+Config.OtherTax = { -- Refer README.md to know more
+    ['food'] = { label = 'Food Tax', percentage = 1 },
+}
+
 -- account where all the taxes will go to
 Config.TaxesAccountEnabled = false
 Config.TaxesAccount = {

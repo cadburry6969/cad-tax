@@ -173,12 +173,22 @@ function GetCurrentTax(src, taxtype)
     end
 end
 
+function ChargeTax(source, data)
+    local amount, accountType, taxdata = data.amount, data.type, Config.OtherTax[data?.taxtype]
+    if not source or not amount or not taxdata then return false end
+    local player = GetPlayer(source)
+    if not player then return false end
+    local _amount = math.floor(amount * (taxdata.percentage / 100))
+    return player.removeMoney(accountType or 'bank', _amount, taxdata.label)
+end
+
 -- Exports
 exports('GetCurrentTax', GetCurrentTax)
 exports('PlayersTax', PlayersTax)
 exports('PropertiesTax', PropertiesTax)
 exports('VehiclesTax', VehiclesTax)
 exports('IsTaxWaivedOff', isTaxWaivedOff)
+exports('ChargeTax', ChargeTax)
 
 -- Old Exports
 exports('HousesTax', PropertiesTax)

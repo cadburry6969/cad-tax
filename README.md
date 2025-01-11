@@ -14,13 +14,29 @@ Simple Tax System for QBCore
 # Server Exports
 
 ```lua
-exports["cad-tax"]:GetCurrentTax(src, type)    -- Get Current Tax percent for the type ["vehicle", "property", "house", "income"]
-exports["cad-tax"]:IsTaxWaivedOff(citizenid) -- Check the player has tax waived off
+--- Get Current Tax percent for the type
+--- @param string citizenid
+--- @param string ["vehicle", "property", "house", "income"]
+--- @return boolean
+exports["cad-tax"]:GetCurrentTax(src, type)
+--- Check the player has tax waived off
+--- @param string citizenid
+--- @return boolean
+exports["cad-tax"]:IsTaxWaivedOff(citizenid)
+--- To start manually
 exports["cad-tax"]:PlayersTax() -- To start manually
+--- To start manually
 exports["cad-tax"]:VehiclesTax()  -- To start manually
-exports["cad-tax"]:PropertiesTax()  -- To start manually
+--- To start manually
+exports["cad-tax"]:PropertiesTax()
+--- To start manually (deprecated)
 exports["cad-tax"]:CarsTax()  -- To start manually (deprecated)
-exports["cad-tax"]:HousesTax()  -- To start manually (deprecated)
+--- To start manually (deprecated)
+exports["cad-tax"]:HousesTax()
+--- Charge manual tax apart from the automated ones using this export
+--- @param table { amount: number, type: string ['cash', 'bank' ...], taxtype: string ['food' ...] }
+--- @return boolean
+exports["cad-tax"]:ChargeTax(source, data)
 ```
 
 # Setup Logs
