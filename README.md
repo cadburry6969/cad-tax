@@ -2,14 +2,15 @@ Simple Tax System for QBCore
 
 # Installation
 
-- First add this to resources folder and ensure in `server.cfg`
-- Configure values in files present in `cad-tax/config/` as required.
+-   First add this to resources folder and ensure in `server.cfg`
+-   Configure values in files present in `cad-tax/config/` as required.
 
 # Supported
-- ESX / QBCore
-- qb-banking / Renewed-Banking / snipe-banking
-- ox lib logger / qb logs
-- ox lib notify / qb notify / qb-phone / snappy-phone / yseries
+
+-   ESX / QBCore
+-   qb-banking / Renewed-Banking / snipe-banking
+-   ox lib logger / qb logs
+-   ox lib notify / qb notify / qb-phone / snappy-phone / yseries
 
 # Server Exports
 
@@ -42,10 +43,13 @@ exports["cad-tax"]:ChargeTax(source, data)
 # Setup Logs
 
 > For qb logs
-- Add below code in `qb-smallresources/server/logs.lua`
+
+-   Add below code in `qb-smallresources/server/logs.lua`
+
 ```lua
 ['cadtax'] = 'PUT_WEBHOOK_HERE',
 ```
 
 > For ox logs
-- Refer [Overextended Docs](https://overextended.dev/ox_lib/Modules/Logger/Server)
+
+-   Refer [Overextended Docs](https://overextended.dev/ox_lib/Modules/Logger/Server)

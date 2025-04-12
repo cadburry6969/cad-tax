@@ -37,7 +37,7 @@ local function notification(src, msg)
             title = Language('notify_header'),
             text = msg,
             timeout = 10000,
-        }, 'source',  src)
+        }, 'source', src)
     elseif Config.Notify == 'lb-phone' then
         exports["lb-phone"]:SendNotification(src, {
             app = "Settings",
@@ -50,7 +50,7 @@ end
 local function sendLog(src, msg)
     if Config.Logger == 'qb' then
         TriggerEvent("qb-log:server:CreateLog", "cadtax", msg)
-    elseif Config.Logger == 'ox' then
+    elseif Config.Logger == 'ox' and lib and lib?.logger then
         lib.logger(src, 'cadtax', msg)
     end
 end
