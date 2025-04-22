@@ -5,7 +5,12 @@ function AddMoneyToAccount(amount, reason)
     elseif GetResourceState('Renewed-Banking') == 'started' then
         return exports['Renewed-Banking']:addAccountMoney(Config.TaxesAccount.accountName, amount)
     elseif GetResourceState('qb-banking') == 'started' then
-        local business = exports['qb-banking']:AddMoney(Config.TaxesAccount.accountName, amount, reason)
+        local status, business = pcall(function() return exports['qb-banking']:business(Config.TaxesAccount.accountName, Config.TaxesAccount.accountId) end)
+        if status and business then
+            return business.addBalance(amount, reason)
+        else
+            return exports['qb-banking']:AddMoney(Config.TaxesAccount.accountName, amount, reason) or false
+        end
         return business or false
     elseif GetResourceState('okokBanking') == 'started' then
         return exports['okokBanking']:AddMoney(Config.TaxesAccount.accountName, amount)

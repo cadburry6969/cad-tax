@@ -11,50 +11,6 @@ local function isTaxWaivedOff(citizenid)
     return Config.TaxesFreeIdentifiers[citizenid]
 end
 
-local function notification(src, msg)
-    if Config.Notify == 'qb' then
-        TriggerClientEvent("QBCore:Notify", src, msg, nil, 10000)
-    elseif Config.Notify == 'ox' then
-        TriggerClientEvent("ox_lib:notify", src, { description = msg, duration = 10000 })
-    elseif Config.Notify == 'qb-phone' then
-        local player = GetPlayer(src)
-        if not player then return end
-        exports['qb-phone']:sendNewMailToOffline(player.citizenid, {
-            sender = Language('notify_header'),
-            subject = Language('notify_subject'),
-            message = msg,
-        })
-    elseif Config.Notify == 'snappy-phone' then
-        TriggerClientEvent('phone:client:notification', src, {
-            title = Language('notify_header'),
-            icon = 'wallet',
-            description = msg,
-            duration = 10000,
-        })
-    elseif Config.Notify == 'yseries' then
-        exports.yseries:SendNotification({
-            app = 'ypay',
-            title = Language('notify_header'),
-            text = msg,
-            timeout = 10000,
-        }, 'source', src)
-    elseif Config.Notify == 'lb-phone' then
-        exports["lb-phone"]:SendNotification(src, {
-            app = "Settings",
-            title = Language('notify_header'),
-            content = msg,
-        })
-    end
-end
-
-local function sendLog(src, msg)
-    if Config.Logger == 'qb' then
-        TriggerEvent("qb-log:server:CreateLog", "cadtax", msg)
-    elseif Config.Logger == 'ox' and lib and lib?.logger then
-        lib.logger(src, 'cadtax', msg)
-    end
-end
-
 function PlayersTax()
     local accountAmount = 0
     local players = GetAllPlayers()
@@ -80,8 +36,10 @@ function PlayersTax()
             end
             player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
             accountAmount = accountAmount + taxInfo.amount
-            notification(src, string.format(Language('player_taxed'), taxInfo.percentage, taxInfo.amount))
-            sendLog(src, string.format(Language('player_taxed_log'), citizenid, taxInfo.amount))
+            if taxInfo and taxInfo.amount and taxInfo.percentage then
+                Notification(src, string.format(Language('player_taxed'), taxInfo.percentage, tonumber(taxInfo.amount)))
+            end
+            SendLog(src, string.format(Language('player_taxed_log'), citizenid, taxInfo.amount))
         end
         ::skip::
     end
@@ -108,8 +66,8 @@ function VehiclesTax()
                     local tax = math.floor(vehicleCount * Config.VehicleTax)
                     player.removeMoney("bank", tax, "vehicletax")
                     accountAmount = accountAmount + tax
-                    notification(player.source, string.format(Language('vehicle_taxed'), tax))
-                    sendLog(src, string.format(Language('vehicle_taxed_log'), citizenid, tax))
+                    if tax then Notification(player.source, string.format(Language('vehicle_taxed'), tax)) end
+                    SendLog(src, string.format(Language('vehicle_taxed_log'), citizenid, tax))
                 end
             end
             ::skip::
@@ -138,8 +96,8 @@ function PropertiesTax()
                     local tax = math.floor(propertyCount * Config.PropertyTax)
                     player.removeMoney("bank", tax, "housetax")
                     accountAmount = accountAmount + tax
-                    notification(player.source, string.format(Language('property_taxed'), tax))
-                    sendLog(src, string.format(Language('property_taxed_log'), citizenid, tax))
+                    if tax then Notification(player.source, string.format(Language('property_taxed'), tax)) end
+                    SendLog(src, string.format(Language('property_taxed_log'), citizenid, tax))
                 end
             end
             ::skip::
