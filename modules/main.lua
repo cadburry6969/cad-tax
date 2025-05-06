@@ -34,11 +34,14 @@ function PlayersTax()
             if not taxInfo then
                 taxInfo = { type = 'bank', amount = Config.IncomeTaxStandard }
             end
-            if exports['exter-billing'] then
-                exports['exter-billing']:AddTaxBill(src, 'Tax', "Income tax", taxInfo.amount)
+            if Config.UseExterBilling then
+                if exports['exter-billing'] then
+                    exports['exter-billing']:AddTaxBill(src, 'Tax', 'Income tax', taxInfo.amount)
+                else
+                    player.Functions.RemoveMoney(taxInfo.type, taxInfo.amount, "incometax")
+                end
             else
-                -- If there is no enter-billing, the money is deducted directly
-                player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
+                player.Functions.RemoveMoney(taxInfo.type, taxInfo.amount, "incometax")
             end
             accountAmount = accountAmount + taxInfo.amount
             if taxInfo and taxInfo.amount and taxInfo.percentage then
@@ -69,12 +72,14 @@ function VehiclesTax()
                 end
                 if vehicleCount > 0 then
                     local tax = math.floor(vehicleCount * Config.VehicleTax)
-                        -- Checking whether external billing exists
-                    if exports['exter-billing'] then
-                        exports['exter-billing']:AddTaxBill(src, 'Vehicle Tax', "Tax for vehicles", tax)
+                    if Config.UseExterBilling then
+                        if exports['exter-billing'] then
+                            exports['exter-billing']:AddTaxBill(src, 'Vehicle Tax', 'Vehicle Tax', tax)
+                        else
+                            player.Functions.RemoveMoney("bank", tax, "vehicletax")
+                        end
                     else
-                        -- If there is no enter-billing, the money is deducted directly
-                        player.removeMoney("bank", tax, "vehicletax")
+                        player.Functions.RemoveMoney("bank", tax, "vehicletax")
                     end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('vehicle_taxed'), tax)) end
@@ -105,12 +110,14 @@ function PropertiesTax()
                 end
                 if propertyCount > 0 then
                     local tax = math.floor(propertyCount * Config.PropertyTax)
-                        -- Checking whether external billing exists
-                    if exports['exter-billing'] then
-                        exports['exter-billing']:AddTaxBill(player.source, 'Property Tax', "Taxes for property", tax)
+                    if Config.UseExterBilling then
+                        if exports['exter-billing'] then
+                            exports['exter-billing']:AddTaxBill(src, 'Property Tax', 'Property Tax', tax)
+                        else
+                            player.Functions.RemoveMoney("bank", tax, "housetax")
+                        end
                     else
-                        -- If there is no enter-billing, the money is deducted directly
-                        player.removeMoney("bank", tax, "housetax")
+                        player.Functions.RemoveMoney("bank", tax, "housetax")
                     end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('property_taxed'), tax)) end
