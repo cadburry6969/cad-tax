@@ -3,6 +3,7 @@ Config = {}
 Config.Locale = 'en' -- 'en'
 Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries', 'lb-phone'
 Config.Logger = 'qb' -- 'qb', 'ox'
+Config.UseExterBilling = true  -- Set false if not using exter-billing
 
 -- Enable/Disable the taxes
 Config.TaxStatus = {
