@@ -34,7 +34,12 @@ function PlayersTax()
             if not taxInfo then
                 taxInfo = { type = 'bank', amount = Config.IncomeTaxStandard }
             end
-            exports['exter-billing']:AddTaxBill(player.source, taxInfo.amount, "Income Tax")
+            if exports['exter-billing'] then
+                exports['exter-billing']:AddTaxBill(src, 'Tax', "Income tax", taxInfo.amount)
+            else
+                -- If there is no enter-billing, the money is deducted directly
+                player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
+            end
             accountAmount = accountAmount + taxInfo.amount
             if taxInfo and taxInfo.amount and taxInfo.percentage then
                 Notification(src, string.format(Language('player_taxed'), taxInfo.percentage, tonumber(taxInfo.amount)))
@@ -64,7 +69,13 @@ function VehiclesTax()
                 end
                 if vehicleCount > 0 then
                     local tax = math.floor(vehicleCount * Config.VehicleTax)
-                    exports['exter-billing']:AddTaxBill(player.source, tax, "Vehicle Tax")
+                        -- Checking whether external billing exists
+                    if exports['exter-billing'] then
+                        exports['exter-billing']:AddTaxBill(src, 'Vehicle Tax', "Tax for vehicles", tax)
+                    else
+                        -- If there is no enter-billing, the money is deducted directly
+                        player.removeMoney("bank", tax, "vehicletax")
+                    end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('vehicle_taxed'), tax)) end
                     SendLog(src, string.format(Language('vehicle_taxed_log'), citizenid, tax))
@@ -94,7 +105,13 @@ function PropertiesTax()
                 end
                 if propertyCount > 0 then
                     local tax = math.floor(propertyCount * Config.PropertyTax)
-                    exports['exter-billing']:AddTaxBill(player.source, tax, "Property Tax")
+                        -- Checking whether external billing exists
+                    if exports['exter-billing'] then
+                        exports['exter-billing']:AddTaxBill(player.source, 'Property Tax', "Taxes for property", tax)
+                    else
+                        -- If there is no enter-billing, the money is deducted directly
+                        player.removeMoney("bank", tax, "housetax")
+                    end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('property_taxed'), tax)) end
                     SendLog(src, string.format(Language('property_taxed_log'), citizenid, tax))
