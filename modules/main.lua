@@ -38,10 +38,10 @@ function PlayersTax()
                 if exports['exter-billing'] then
                     exports['exter-billing']:AddTaxBill(src, 'Tax', 'Income tax', taxInfo.amount)
                 else
-                    player.Functions.RemoveMoney(taxInfo.type, taxInfo.amount, "incometax")
+                    player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
                 end
             else
-                player.Functions.RemoveMoney(taxInfo.type, taxInfo.amount, "incometax")
+                player.removeMoney(taxInfo.type, taxInfo.amount, "incometax")
             end
             accountAmount = accountAmount + taxInfo.amount
             if taxInfo and taxInfo.amount and taxInfo.percentage then
@@ -76,10 +76,10 @@ function VehiclesTax()
                         if exports['exter-billing'] then
                             exports['exter-billing']:AddTaxBill(src, 'Vehicle Tax', 'Vehicle Tax', tax)
                         else
-                            player.Functions.RemoveMoney("bank", tax, "vehicletax")
+                            player.removeMoney("bank", tax, "vehicletax")
                         end
                     else
-                        player.Functions.RemoveMoney("bank", tax, "vehicletax")
+                        player.removeMoney("bank", tax, "vehicletax")
                     end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('vehicle_taxed'), tax)) end
@@ -114,10 +114,10 @@ function PropertiesTax()
                         if exports['exter-billing'] then
                             exports['exter-billing']:AddTaxBill(src, 'Property Tax', 'Property Tax', tax)
                         else
-                            player.Functions.RemoveMoney("bank", tax, "housetax")
+                            player.removeMoney("bank", tax, "housetax")
                         end
                     else
-                        player.Functions.RemoveMoney("bank", tax, "housetax")
+                        player.removeMoney("bank", tax, "housetax")
                     end
                     accountAmount = accountAmount + tax
                     if tax then Notification(player.source, string.format(Language('property_taxed'), tax)) end
