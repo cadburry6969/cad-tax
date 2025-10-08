@@ -81,14 +81,15 @@ end
 function PropertiesTax()
     local accountAmount = 0
     local players = GetAllPlayers()
-    MySQL.query(Config.PropertySQL.query, {}, function(properties)
+    local property = GetPropertySQL()
+    MySQL.query(property.query, {}, function(properties)
         for src, player in pairs(players) do
             local propertyCount = 0
             if player then
                 local citizenid = player.citizenid
                 if isTaxWaivedOff(citizenid) then goto skip end
                 for i = 1, #properties, 1 do
-                    if citizenid == properties[i][Config.PropertySQL.identifier] then
+                    if citizenid == properties[i][property.identifier] then
                         propertyCount = propertyCount + 1
                     end
                 end

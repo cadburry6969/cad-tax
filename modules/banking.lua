@@ -2,6 +2,8 @@ function AddMoneyToAccount(amount, reason)
     if GetResourceState('snipe-banking') == 'started' then
         exports['snipe-banking']:AddMoneyToAccount(Config.TaxesAccount.accountName, amount)
         -- exports['snipe-banking']:CreateJobTransactions(Config.TaxesAccount.accountName, amount, reason, 'deposit', Config.TaxesAccount.playerCitizenId, Config.TaxesAccount.accountName, true)
+    elseif GetResourceState('kartik-banking') == 'started' then
+        return exports['kartik-banking']:AddAccountMoney(Config.TaxesAccount.accountName, amount, reason)
     elseif GetResourceState('Renewed-Banking') == 'started' then
         return exports['Renewed-Banking']:addAccountMoney(Config.TaxesAccount.accountName, amount)
     elseif GetResourceState('qb-banking') == 'started' then

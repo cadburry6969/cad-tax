@@ -1,7 +1,7 @@
 Config = {}
 
-Config.Locale = 'en' -- 'en'
-Config.Notify = 'ox' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries', 'lb-phone'
+Config.Locale = 'en' -- 'en', 'es', 'fr', 'de', 'pt', 'zh', 'ru', 'ar', 'hi'
+Config.Notify = 'qb' -- 'qb', 'qb-phone', 'ox', 'snappy-phone', 'yseries', 'lb-phone'
 Config.Logger = 'qb' -- 'qb', 'ox'
 
 -- Enable/Disable the taxes
