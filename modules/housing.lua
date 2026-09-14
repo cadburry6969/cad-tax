@@ -9,6 +9,11 @@ function GetPropertySQL()
             query = 'SELECT * FROM properties',
             identifier = 'owner_citizenid'
         }
+    elseif GetResourceState('kartik-properties') == 'started' then
+        return {
+            query = `SELECT * FROM kp_properties WHERE owner_type = 'citizen'`,
+            identifier = 'owner_id'
+        }
     elseif GetResourceState('nolag_properties') == 'started' then
         return {
             query = 'SELECT * FROM properties_owners',
@@ -34,5 +39,7 @@ function GetPropertySQL()
             query = 'SELECT * FROM origen_housing',
             identifier = 'citizenid'
         }
+    else
+        return nil
     end
 end

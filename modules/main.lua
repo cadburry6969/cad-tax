@@ -82,6 +82,7 @@ function PropertiesTax()
     local accountAmount = 0
     local players = GetAllPlayers()
     local property = GetPropertySQL()
+    if not property then return end
     MySQL.query(property.query, {}, function(properties)
         for src, player in pairs(players) do
             local propertyCount = 0
