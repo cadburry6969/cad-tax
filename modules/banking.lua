@@ -22,6 +22,8 @@ function AddMoneyToAccount(amount, reason)
         return exports['tgg-banking']:AddMoney(Config.TaxesAccount.accountName, amount, reason)
     elseif GetResourceState('p_banking') == 'started' then
         return exports['p_banking']:addAccountMoney(Config.TaxesAccount.accountName, amount, reason)
+    elseif GetResourceState('lation_banking') == 'started' then
+        return exports.lation_banking:AddAccountMoney(Config.TaxesAccount.accountName, amount, reason)
     else
         print("NO BANKING CONFIGURED")
         return false
